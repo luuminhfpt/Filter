@@ -78,7 +78,7 @@ class Filter
 
                     return [$config['column'], $operator, $searchKeyword];
                 }
-            }, $conditions)
+            }, $conditions, array_keys($conditions))
         );
     }
 
