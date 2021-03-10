@@ -1,5 +1,5 @@
 # The license
 
-Copyright (c) author name <author email>
+Copyright (c) author name lehuutrinh32@gmail.com
 
-...Add your license text here...
+vdvt filter
