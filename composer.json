@@ -1,6 +1,7 @@
 {
     "name": "vdvt/filter",
     "description": "vdvt filter",
+    "license": "BSD-3-Clause",
     "authors": [
         {
             "name": "Trinh Le",
