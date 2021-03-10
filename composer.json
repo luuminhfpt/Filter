@@ -10,7 +10,7 @@
     "homepage": "https://github.com/vdvt/filter",
     "keywords": ["Laravel", "Filter"],
     "require": {
-        "illuminate/support": "~7|~8",
+        "illuminate/support": "~5",
         "vdvt/support": "~1.0|~5.0"
     },
     "require-dev": {
