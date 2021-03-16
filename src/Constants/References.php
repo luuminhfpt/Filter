@@ -23,4 +23,9 @@ interface References
      * Operator Query Like
      */
     const FILTER_OPERATOR_ILIKE = 'ILIKE';
+
+    /**
+     * Operator Query IN
+     */
+    const FILTER_OPERATOR_IN = 'IN';
 }

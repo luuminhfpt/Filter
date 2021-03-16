@@ -3,6 +3,8 @@
 namespace VDVT\Filter;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Facades\Config;
 use VDVT\Filter\Constants\References;
 
@@ -15,10 +17,10 @@ class Filter
      * @author  TrinhLe
      * @return array
      */
-    public function filtersSearchHelper(array $data, array $conditions): array
+    public function filtersSearchHelper(array $data, array $conditions, &$builder = null): array
     {
         return array_filter(
-            array_map(function ($config, $keyword) use ($data) {
+            array_map(function ($config, $keyword) use ($data, &$builder) {
                 $searchKeyword = array_get($data, $keyword);
 
                 if ($callbackFilterInput = array_get($config, 'callbackFilterInput')) {
@@ -55,7 +57,10 @@ class Filter
 
                     if ($callbackType = array_get($config, 'callbackType')) {
                         $searchKeyword = $callbackType($searchKeyword);
-                        if (is_null($searchKeyword) || $searchKeyword == '') {
+                        if (
+                            is_null($searchKeyword) ||
+                            $searchKeyword == ''
+                        ) {
                             return;
                         }
                     }
@@ -71,6 +76,11 @@ class Filter
                         case References::FILTER_OPERATOR_ILIKE:
                             $searchKeyword = "%{$searchKeyword}%";
                             break;
+                        case References::FILTER_OPERATOR_IN:
+                            if ($builder instanceof EloquentBuilder || $builder instanceof QueryBuilder) {
+                                $builder->whereIn($config['column'], is_array($searchKeyword) ? $searchKeyword : []);
+                                return;
+                            }
                     }
 
                     return [$config['column'], $operator, $searchKeyword];
