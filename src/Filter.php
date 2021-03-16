@@ -3,7 +3,6 @@
 namespace VDVT\Filter;
 
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use VDVT\Filter\Constants\References;
 
@@ -16,10 +15,8 @@ class Filter
      * @author  TrinhLe
      * @return array
      */
-    public static function filtersSearchHelper(array $data, array $conditions): array
+    public function filtersSearchHelper(array $data, array $conditions): array
     {
-        $filters = array();
-
         return array_filter(
             array_map(function ($config, $keyword) use ($data) {
                 $searchKeyword = array_get($data, $keyword);
