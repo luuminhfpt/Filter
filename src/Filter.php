@@ -36,8 +36,7 @@ class Filter
                     if ($inputType = array_get($config, 'inputType')) {
                         switch ($inputType) {
                             case References::DATA_TYPE_DATE_TIME_ZONE:
-                                $searchKeyword = Carbon::createFromFormat(
-                                    'm/d/Y H:i:s',
+                                $searchKeyword = Carbon::createFromTimestamp(
                                     strtotime($searchKeyword),
                                     $this->getDefaultTimezone()
                                 )->setTimezone(Config::get('app.timezone', 'UTC'));
