@@ -58,7 +58,7 @@ class Filter
                         $searchKeyword = $callbackType($searchKeyword);
                         if (
                             is_null($searchKeyword) ||
-                            $searchKeyword == ''
+                            $searchKeyword === ''
                         ) {
                             return;
                         }
