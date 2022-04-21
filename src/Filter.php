@@ -13,9 +13,9 @@ class Filter
     use \VDVT\Support\Traits\UserTimezoneTrait;
 
     /**
-     * Helper draw data search
-     * @author  TrinhLe
+     * HelperMigrate draw data search
      * @return array
+     * @author  TrinhLe
      */
     public function filtersSearchHelper(array $data, array $conditions, &$builder = null): array
     {
@@ -46,7 +46,7 @@ class Filter
                                 }
                                 break;
                             case References::DATA_TYPE_INTEGER:
-                                $searchKeyword = (int) $searchKeyword;
+                                $searchKeyword = (int)$searchKeyword;
                                 break;
                             case References::DATA_TYPE_BOOLEAN:
                                 $searchKeyword = filter_var($searchKeyword, FILTER_VALIDATE_BOOLEAN);
@@ -62,6 +62,10 @@ class Filter
                         ) {
                             return;
                         }
+                    }
+
+                    if (array_get($config, 'isStrToLower')) {
+                        $searchKeyword = strtolower($searchKeyword);
                     }
 
                     /**
@@ -91,7 +95,7 @@ class Filter
     /**
      * getSortString
      *
-     * @param  array  $filters
+     * @param array $filters
      * @return string
      */
     public function getSortString(array $filters, array $options): string
@@ -100,10 +104,10 @@ class Filter
         $orderField = array_get($options, 'default', 'id');
 
         if (
-            in_array(
-                array_get($filters, 'orderBy', $orderField),
-                array_get($options, 'columns')
-            )
+        in_array(
+            array_get($filters, 'orderBy', $orderField),
+            array_get($options, 'columns')
+        )
         ) {
             $orderField = array_get($filters, 'orderBy', $orderField);
         }
