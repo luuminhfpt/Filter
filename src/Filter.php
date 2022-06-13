@@ -22,6 +22,7 @@ class Filter
         return array_filter(
             array_map(function ($config, $keyword) use ($data, &$builder) {
                 $searchKeyword = array_get($data, $keyword);
+                $column = array_get($config, 'column');
 
                 if ($callbackFilterInput = array_get($config, 'callbackFilterInput')) {
                     $searchKeyword = $callbackFilterInput($searchKeyword);
@@ -81,12 +82,24 @@ class Filter
                             break;
                         case References::FILTER_OPERATOR_IN:
                             if ($builder instanceof EloquentBuilder || $builder instanceof QueryBuilder) {
-                                $builder->whereIn($config['column'], is_array($searchKeyword) ? $searchKeyword : []);
+                                $builder->whereIn($column, is_array($searchKeyword) ? $searchKeyword : []);
                                 return;
                             }
                     }
 
-                    return [$config['column'], $operator, $searchKeyword];
+                    if (is_array($column)) {
+                        if ($builder instanceof EloquentBuilder || $builder instanceof QueryBuilder) {
+                            $builder
+                                ->where(function ($query) use ($column, $operator, $searchKeyword) {
+                                    foreach ($column as $queryColumn) {
+                                        $query->orWhere($queryColumn, $operator, $searchKeyword);
+                                    }
+                                });
+                        }
+                        return;
+                    }
+
+                    return [$column, $operator, $searchKeyword];
                 }
             }, $conditions, array_keys($conditions))
         );
