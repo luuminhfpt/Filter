@@ -21,10 +21,10 @@ class Filter
     {
         return array_filter(
             array_map(function ($config, $keyword) use ($data, &$builder) {
-                $searchKeyword = array_get($data, $keyword);
-                $column = array_get($config, 'column');
+                $searchKeyword = data_get($data, $keyword);
+                $column = data_get($config, 'column');
 
-                if ($callbackFilterInput = array_get($config, 'callbackFilterInput')) {
+                if ($callbackFilterInput = data_get($config, 'callbackFilterInput')) {
                     $searchKeyword = $callbackFilterInput($searchKeyword);
                 }
 
@@ -34,7 +34,7 @@ class Filter
                      *
                      * @author TrinhLe(trinh.le@bigin.vn)
                      */
-                    if ($inputType = array_get($config, 'inputType')) {
+                    if ($inputType = data_get($config, 'inputType')) {
                         switch ($inputType) {
                             case References::DATA_TYPE_DATE_TIME_ZONE:
                                 $searchKeyword = Carbon::createFromTimestamp(
@@ -42,7 +42,7 @@ class Filter
                                     $this->getDefaultTimezone()
                                 )->setTimezone(Config::get('app.timezone', 'UTC'));
 
-                                if (array_get($config, 'is_end')) {
+                                if (data_get($config, 'is_end')) {
                                     $searchKeyword->addHours(24);
                                 }
                                 break;
@@ -55,7 +55,7 @@ class Filter
                         }
                     }
 
-                    if ($callbackType = array_get($config, 'callbackType')) {
+                    if ($callbackType = data_get($config, 'callbackType')) {
                         $searchKeyword = $callbackType($searchKeyword);
                         if (
                             is_null($searchKeyword) ||
@@ -65,7 +65,7 @@ class Filter
                         }
                     }
 
-                    if (array_get($config, 'isStrToLower')) {
+                    if (data_get($config, 'isStrToLower')) {
                         $searchKeyword = strtolower($searchKeyword);
                     }
 
@@ -74,7 +74,7 @@ class Filter
                      *
                      * @author TrinhLe(trinh.le@bigin.vn)
                      */
-                    $operator = array_get($config, 'operator', '=');
+                    $operator = data_get($config, 'operator', '=');
 
                     switch ($operator) {
                         case References::FILTER_OPERATOR_ILIKE:
@@ -113,16 +113,16 @@ class Filter
      */
     public function getSortString(array $filters, array $options): string
     {
-        $orderBy = array_get($filters, 'ascending') ? 'ASC' : 'DESC';
-        $orderField = array_get($options, 'default', 'id');
+        $orderBy = data_get($filters, 'ascending') ? 'ASC' : 'DESC';
+        $orderField = data_get($options, 'default', 'id');
 
         if (
         in_array(
-            array_get($filters, 'orderBy', $orderField),
-            array_get($options, 'columns')
+            data_get($filters, 'orderBy', $orderField),
+            data_get($options, 'columns')
         )
         ) {
-            $orderField = array_get($filters, 'orderBy', $orderField);
+            $orderField = data_get($filters, 'orderBy', $orderField);
         }
 
         return "{$orderField} {$orderBy}";
